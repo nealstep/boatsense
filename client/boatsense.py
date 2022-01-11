@@ -19,12 +19,12 @@ def setup_logger():
     form1 = Formatter(CFG.log_fmt, datefmt=CFG.log_fmt_dt)
     sth.setFormatter(form1)
     LG.addHandler(sth)
-    fh = TimedRotatingFileHandler(CFG.log_file, when='midnight',
-                                      backupCount=3)
+    fh = TimedRotatingFileHandler(CFG.log_file, when='midnight', backupCount=3)
     form2 = Formatter(CFG.log_fmt, datefmt=CFG.log_fmt_dt)
     fh.setFormatter(form2)
     LG.addHandler(fh)
     LG.setLevel(CFG.log_levels[CFG.log_lvl])
+
 
 class BoatSense(object):
 
@@ -45,12 +45,18 @@ class BoatSense(object):
         for dev in devs:
             every(CFG.timings[dev]).seconds.do(devs[dev].get)
         every(CFG.timings['heartbeat']).seconds.do(self.heartbeat)
+        every(CFG.timings['upload']).seconds.do(self.upload)
         self.sleep = min(CFG.timings.values())
 
     def heartbeat(self):
         LG.info("Heartbeat")
         self.data.get_vars()
         self.data.save()
+
+    def upload(self):
+        LG.info("Upload")
+        # check if new data
+        # upload new data
     
     def run(self):
         LG.info("Running")

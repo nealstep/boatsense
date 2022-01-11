@@ -72,8 +72,7 @@ class Data(object):
             
     def save(self):
         """save data and update last update"""
-        self.insert(CFG.sensors['data'].insert,
-                        (self._NAME, self.cur['asat_real']), False)
+        self.insert(CFG.sensors['data'].insert, (self._NAME, self.cur['asat_real']), False)
         if CFG.sensors[self._NAME].saves:
             self.last = self.cur.copy()
             data = [self.cur[i] for i in CFG.sensors[self._NAME].saves]
@@ -103,10 +102,11 @@ class BME280(Data):
         
     def get(self):
         self.get_vars()
-        gamma = (self.b * self.cur['temperature'] \
-                     / (self.c + self.cur['temperature'])) \
+        # calculate dew point
+        gamma = (self.b * self.cur['temperature'] / (self.c + self.cur['temperature'])) \
                      + log(self.cur['humidity'] / 100.0)
         self.cur['dew_point'] = (self.c * gamma) / (self.b - gamma)
+        # calculate pressure change over time
         for i in (4, 9, 14):
             item = 'pressure_{:02d}'.format(i+1)
             if self.press[i] == -1:
@@ -124,6 +124,7 @@ class LSM9DS1(Data):
     def __init__(self, db, i2c):
         super().__init__(db)
         self.dev = LSM9DS1_I2C(i2c)
+        # expand tuples for diffs
         self.tuples = CFG.sensors[self._NAME].tuples
         self.axis = CFG.sensors[self._NAME].axis
         for t in self.tuples:
@@ -137,6 +138,7 @@ class LSM9DS1(Data):
     def get(self):
         self.get_vars()
         for i in self.items:
+            # expand tuples
             if i in self.tuples:
                 self.cur[i] = list(self.cur[i])
                 for a in range(3):

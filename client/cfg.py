@@ -54,7 +54,8 @@ create table if not exists bme280 (
 )
 '''
     insert = '''
-insert into bme280(asat, temperature, pressure, humidity, pressure_05, pressure_10, pressure_15) values (?, ?, ?, ?, ?, ?, ?)
+insert into bme280(asat, temperature, pressure, humidity, pressure_05, pressure_10, pressure_15) 
+  values (?, ?, ?, ?, ?, ?, ?)
 '''
 
     
@@ -71,9 +72,11 @@ class LSM9DS1:
         'temperature': 1.5
         }
     saves = [
-        'asat_real', 'acceleration_x', 'acceleration_y', 'acceleration_z',
-        'magnetic_x', 'magnetic_y', 'magnetic_z', 'gyro_x', 'gyro_x',
-        'gyro_x', 'temperature'
+        'asat_real', 
+        'acceleration_x', 'acceleration_y', 'acceleration_z',
+        'magnetic_x', 'magnetic_y', 'magnetic_z', 
+        'gyro_x', 'gyro_x', 'gyro_x', 
+        'temperature'
     ]
     tuples = ['acceleration', 'magnetic', 'gyro']
     axis = ['x', 'y', 'z']
@@ -93,7 +96,11 @@ create table if not exists lsm9ds1 (
 )
 '''
     insert = '''
-insert into lsm9ds1(asat, acceleration_x, acceleration_y, acceleration_z, magnetic_x, magnetic_y, magnetic_z, gyro_x, gyro_y, gyro_z, temperature) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+insert into lsm9ds1(asat, 
+    acceleration_x, acceleration_y, acceleration_z, 
+    magnetic_x, magnetic_y, magnetic_z, 
+    gyro_x, gyro_y, gyro_z, temperature) 
+  values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 '''
 
     
@@ -133,8 +140,10 @@ create table if not exists gps (
 )
 '''
     insert = '''
-insert into gps(asat, mode, sats_valid, lat, lon, altitude, m_speed, m_track, m_climb) values (?, ?, ?, ?, ?, ?, ?, ?, ?)
+insert into gps(asat, mode, sats_valid, lat, lon, altitude, m_speed, m_track, m_climb) 
+  values (?, ?, ?, ?, ?, ?, ?, ?, ?)
 '''
+    
     
 class CFG:
 
@@ -155,7 +164,8 @@ class CFG:
         'bme280': 5,
         'gps': 1,
         'lsm9ds1': 1,
-        'heartbeat': 20
+        'heartbeat': 20,
+        'upload': 60
     }
     sensors = {
         'data': Data,
