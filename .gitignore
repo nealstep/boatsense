@@ -129,5 +129,4 @@ dmypy.json
 .pyre/
 
 # neal
-boatsense.db
-boatsense-client.log
+run

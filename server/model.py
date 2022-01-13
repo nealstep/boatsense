@@ -3,16 +3,24 @@ from sqlalchemy.orm import relationship
 
 from .db import Base
 
-class Update(Base):
+class Dates(object):
+
+    name = Column(String(32), primary_key=True)
+    asat = Column(DateTime, nullable=False)
+
+class Update(Dates, Base):
     __tablename__ = "updates"
 
-    name = Column(String(32), primary_key=True)
-    asat = Column(DateTime, nullable=False)
-
-class Read(Base):
+class Read(Dates, Base):
     __tablename__ = "reads"
 
-    name = Column(String(32), primary_key=True)
-    asat = Column(DateTime, nullable=False)
+class BME280(Base):
+    __tablename__ = "bme280"
 
-
+    asat = Column(DateTime, primary_key=True)
+    temperature = Column(Float, nullable=False)
+    pressure = Column(Float, nullable=False)
+    humidity = Column(Float, nullable=False)
+    pressure_05 = Column(Float, nullable=False)
+    pressure_10 = Column(Float, nullable=False)
+    pressure_15 = Column(Float, nullable=False)

@@ -26,16 +26,16 @@ async def validation_exception_handler(request, exc):
 async def root():
     return {"msg": "Hello"}
 
-def get_dates(db, base, skip, limit):
-    return crud.get_dates(db, base, skip=skip, limit=limit)
+def get_dates(db: Session, dates: model.Dates, skip: int, limit: int):
+    return crud.get_dates(db, dates, skip=skip, limit=limit)
 
-def get_date(db, base, name):
-    return crud.get_date(db, base, name)
+def get_date(db: Session, dates: model.Dates, name: str):
+    return crud.get_date(db, dates, name)
 
-def set_date(db, base, name, asat_real):
+def set_date(db: Session, dates: model.Dates, name: str, asat_real: float):
     asat = datetime.fromtimestamp(asat_real)
     asat = asat.astimezone(tz=timezone.utc)
-    return crud.set_date(db, base, name, asat)
+    return crud.set_date(db, dates, name, asat)
 
 @app.get("/updates/", response_model=List[schema.Update])
 def get_updates(skip: int = 0, limit: int = DB_LIMIT, db: Session = Depends(get_db)):
@@ -45,7 +45,7 @@ def get_updates(skip: int = 0, limit: int = DB_LIMIT, db: Session = Depends(get_
 def get_update(name: str , db: Session = Depends(get_db)):
     return get_date(db, model.Update, name)
 
-@app.post("/update/{name}/{asat_real}", response_model=schema.Update)
+@app.put("/update/{name}/{asat_real}", response_model=schema.Update)
 def add_update(name: str, asat_real: float, db: Session = Depends(get_db)):
     return set_date(db, model.Update, name, asat_real)
 
@@ -57,6 +57,11 @@ def get_reads(skip: int = 0, limit: int = DB_LIMIT, db: Session = Depends(get_db
 def get_read(name: str , db: Session = Depends(get_db)):
     return get_date(db, model.Read, name)
 
-@app.post("/read/{name}/{asat_real}", response_model=schema.Read)
+@app.put("/read/{name}/{asat_real}", response_model=schema.Read)
 def add_read(name: str, asat_real: float, db: Session = Depends(get_db)):
     return set_date(db, model.Read, name, asat_real)
+
+@app.get("/bme280/", response_model=schema.BME280)
+def get_bme(db: Session = Depends(get_db)):
+    return get_bme(db)
+

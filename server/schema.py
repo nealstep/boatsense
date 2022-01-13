@@ -1,18 +1,27 @@
 from pydantic import BaseModel
 from datetime import datetime
 
-class Update(BaseModel):
-
-    name: str
-    asat: datetime 
+class ORMModel(BaseModel):
 
     class Config:
         orm_mode = True
 
-class Read(BaseModel):
+class Update(ORMModel):
+
+    name: str
+    asat: datetime 
+    
+class Read(ORMModel):
 
     name: str
     asat: datetime 
 
-    class Config:
-        orm_mode = True
+class BME280(ORMModel):
+
+    asat: datetime
+    temperature: float
+    pressure: float
+    humidity: float
+    pressure_05: float
+    pressure_10: float
+    pressure_15: float
