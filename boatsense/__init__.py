@@ -97,6 +97,7 @@ class CFG:
         'heartbeat': 30,
         'upload': 60
     }
+    udp_addr = ('192.168.15.255', 22001)
 
 LG = getLogger(CFG.name)
 LG.propagate = False
