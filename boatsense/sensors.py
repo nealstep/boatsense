@@ -2,6 +2,7 @@ from adafruit_bme280.basic import Adafruit_BME280_I2C
 from adafruit_lsm9ds1 import LSM9DS1_I2C
 from board import I2C
 from collections import deque
+from copy import deepcopy
 from gpsd import connect as gps_connect, get_current as gps_get_current
 from gpsd import device as gps_device
 from logging import getLogger
@@ -51,9 +52,9 @@ class Data(object):
     def check(self, schemata: schema.Data) -> schema.Data:
         """check if data has changed"""
         if not self.last or self.changed():
-            self.last = self.cur.copy() # this may have to be deep copy
-            values = { k:v for k,v in self.cur if k in schemata.schema()}
-            print(values)
+            self.last = deepcopy(self.cur)
+            items = schemata.schema()['properties'].keys()
+            values = {k:v for k,v in self.cur.items() if k in items}
             data = schemata(**values)
         else:
             data = None
@@ -116,7 +117,7 @@ class GPS(Data):
         
     def set_vars(self, level: str):
         self.items = self.cfg.items[level]
-        self.funcs = self.funcs[level]
+        self.funcs = self.cfg.funcs[level]
         
     def get(self) -> schema.GPS:
         self.dev = gps_get_current()

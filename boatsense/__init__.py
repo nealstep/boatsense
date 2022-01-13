@@ -2,7 +2,7 @@ from logging import DEBUG, ERROR, INFO, WARNING
 from logging import Formatter, StreamHandler
 from logging import getLogger
 from logging.handlers import TimedRotatingFileHandler
-
+from os import environ
 
 class Data:
 
@@ -62,8 +62,8 @@ class GPS(Data):
 class CFG:
     '''config object class'''
 
-    db_limit = 100
-    db_url = "postgresql:///neal"
+    db_limit = environ.get('DB_LIMIT', 100)
+    db_url = environ.get('DB_URL', "postgresql:///neal")
     initial_name_data = [
         {'name': 'heartbeat', 'sensor': False, 'asat': None},
         {'name': 'upload', 'sensor': False, 'asat': None},
