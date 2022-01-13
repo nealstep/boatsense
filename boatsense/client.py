@@ -27,34 +27,18 @@ class Client(object):
         self.sensors['lsm9ds1'] = sensors.LSM9DS1()
         self.sensors['gps'] = sensors.GPS()
         for t in CFG.timings:
-            every(CFG.timings[t]).seconds.do(getattr(self, t))
+            every(CFG.timings[t]).seconds.do(self.get_reading, name=t)
         self.sleep = min(CFG.timings.values())
 
     def get_reading(self, name: str):
-        asat = datetime.now(tz=timezone.utc)
-        data = self.sensors[name].get()
-        crud.add_sensor(self.db, name, asat, data)
-
-    def bme280(self):
-        LG.debug("bme280")
-        self.get_reading('bme280')
-
-    def lsm9ds1(self):
-        LG.debug("lsm9ds1")
-        self.get_reading('lsm9ds1')
-
-    def gps(self):
-        LG.debug("gps")
-        self.get_reading('gps')
-
-    def heartbeat(self):
-        LG.debug("Heartbeat")
-        crud.add_special(self.db, 'heartbeat')
-
-    def upload(self):
-        LG.debug("Upload")
-        crud.add_special(self.db, 'upload')
-        LG.error("Not Implemented: upload")
+        if name in self.sensors:
+            data = self.sensors[name].get()
+            asat = datetime.now(tz=timezone.utc)
+            crud.add_sensor(self.db, name, asat, data)
+        else:
+            if name == 'upload':
+                self.upload()
+            crud.add_special(self.db, name)
 
     def run(self):
         LG.info("Running")
@@ -70,5 +54,5 @@ if __name__ == "__main__":
         client = Client(db)
         client.run()
     finally:
-        LG.info("Closing DB")
+        LG.warning("Closing DB")
         db.close()

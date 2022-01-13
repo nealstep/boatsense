@@ -10,7 +10,6 @@ class Name(Base):
     name = Column(String(32), primary_key=True)
     sensor = Column(Boolean, nullable=False)
 
-# how to load defaults
 
 class When(Base):
     __tablename__ = "whens"
