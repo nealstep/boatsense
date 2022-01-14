@@ -100,7 +100,6 @@ class CFG:
     mqtt = '192.168.15.148'
     mqtt_topic = "sensors/{}"
     udp_addr = ('192.168.15.255', 22001)
-    udp_size = 1024
 
 LG = getLogger(CFG.name)
 LG.propagate = False

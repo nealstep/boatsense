@@ -58,17 +58,6 @@ class Client(object):
         LG.info("Running")
         while True:
             run_pending()
-            try:
-                data, addr = self.listen.recvfrom(CFG.udp_size)
-                if data:
-                    if data.decode('utf-8') == 'T':
-                        LG.info("Sending UDP on")
-                        self.send = True
-                    else:
-                        LG.info("Sending UDP off")
-                        self.send = False
-            except BlockingIOError:
-                pass
             sleep(self.sleep)
 
 if __name__ == "__main__":
