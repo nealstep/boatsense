@@ -52,7 +52,7 @@ class GPS(Data):
     diffs = {
         'lat': 0.01,
         'lon': 0.01,
-        'altitude': 0.3,
+        'altitude': 1,
         'm_speed': 0.2,
         'm_climb': 0.2,
     }
@@ -99,6 +99,7 @@ class CFG:
     }
     upd_listen = ('192.168.15.148', 22002)
     udp_addr = ('192.168.15.255', 22001)
+    udp_size = 1024
 
 LG = getLogger(CFG.name)
 LG.propagate = False
