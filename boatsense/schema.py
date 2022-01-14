@@ -37,12 +37,12 @@ class GPS(Data):
     '''GPS Data'''
     mode: int
     sats_valid: int
-    lat: float
-    lon: float
-    altitude: float
-    m_speed: float
-    m_track: float
-    m_climb:float
+    lat: Optional[float]
+    lon: Optional[float]
+    altitude: Optional[float]
+    m_speed: Optional[float]
+    m_track: Optional[float]
+    m_climb:Optional[float]
 
 
 class ORMModel(BaseModel):

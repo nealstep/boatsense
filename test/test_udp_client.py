@@ -5,6 +5,9 @@ from socket import AF_INET, SOCK_DGRAM, SOL_SOCKET, SO_BROADCAST
 from socket import socket
 
 client = socket(AF_INET, SOCK_DGRAM)
+client.sendto("T", ('192.168.15.148', 22002))
+
+client = socket(AF_INET, SOCK_DGRAM)
 client.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
 client.bind(("", 22001))
 while True:

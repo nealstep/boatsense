@@ -1,5 +1,5 @@
 from logging import DEBUG, ERROR, INFO, WARNING
-from logging import Formatter, StreamHandler
+from logging import Logger, Formatter, StreamHandler
 from logging import getLogger
 from logging.handlers import TimedRotatingFileHandler
 from os import environ
@@ -97,12 +97,13 @@ class CFG:
         'heartbeat': 30,
         'upload': 60
     }
+    upd_listen = ('192.168.15.148', 22002)
     udp_addr = ('192.168.15.255', 22001)
 
 LG = getLogger(CFG.name)
 LG.propagate = False
 
-def setup_logger(lg):
+def setup_logger(lg: Logger):
     sth = StreamHandler()
     form1 = Formatter(CFG.log_fmt, datefmt=CFG.log_fmt_dt)
     sth.setFormatter(form1)

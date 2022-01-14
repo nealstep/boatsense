@@ -21,9 +21,7 @@ class Client(object):
     def __init__(self, db: Session):
         self.db = db
         i2c = I2C()
-        self.server = socket(AF_INET, SOCK_DGRAM)
-        self.server.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
-        self.server.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
+        self.network()
         self.sensors = {}
         self.sensors['bme280'] = sensors.BME280(i2c)
         self.sensors['lsm9ds1'] = sensors.LSM9DS1(i2c)
@@ -31,6 +29,16 @@ class Client(object):
         for t in CFG.timings:
             every(CFG.timings[t]).seconds.do(self.get_reading, name=t)
         self.sleep = min(CFG.timings.values())
+
+    def network(self):
+        self.server = socket(AF_INET, SOCK_DGRAM)
+        self.server.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+        self.server.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
+        self.listen = socket(AF_INET, SOCK_DGRAM)
+        self.listen.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+        self.listen.setblocking(False)
+        self.listen.bind(CFG.upd_listen)
+        self.send = False
 
     def upload(self):
         LG.warning("Not Implemented: upload")
@@ -41,8 +49,9 @@ class Client(object):
             if data:
                 asat = datetime.now(tz=timezone.utc)
                 crud.add_sensor(self.db, name, asat, data)
-                msg = '{{"{}": {}}}'.format(name, data.json()).encode('utf-8')
-                self.server.sendto(msg, CFG.udp_addr)
+                if self.send:
+                    msg = '{{"{}": {}}}'.format(name, data.json()).encode('utf-8')
+                    self.server.sendto(msg, CFG.udp_addr)
         else:
             if name == 'upload':
                 self.upload()
@@ -52,6 +61,12 @@ class Client(object):
         LG.info("Running")
         while True:
             run_pending()
+            data = self.listen.receive(1024)
+            if data:
+                if data.decode('utf-8') == 'T':
+                    self.send = True
+                else:
+                    self.send = False
             sleep(self.sleep)
 
 if __name__ == "__main__":

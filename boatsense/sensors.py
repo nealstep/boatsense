@@ -14,7 +14,7 @@ LG = getLogger("{}.{}".format(CFG.name, __name__))
 
 class Data(object):
 
-    def __init__(self, name='data'):
+    def __init__(self, name: str ='data'):
         self.name = name
         self.dev = None
         self.cur = {}
