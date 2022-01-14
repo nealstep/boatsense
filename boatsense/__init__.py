@@ -97,7 +97,8 @@ class CFG:
         'heartbeat': 30,
         'upload': 60
     }
-    upd_listen = ('192.168.15.148', 22002)
+    mqtt = '192.168.15.148'
+    mqtt_topic = "sensors/{}"
     udp_addr = ('192.168.15.255', 22001)
     udp_size = 1024
 
