@@ -45,6 +45,7 @@ class Client(object):
         if name in self.sensors:
             data = self.sensors[name].get()
             if data:
+                LG.debug("New data: {}".format(name))
                 asat = datetime.now(tz=timezone.utc)
                 crud.add_sensor(self.db, name, asat, data)
                 msg = '{{"{}": {}}}'.format(name, data.json())
