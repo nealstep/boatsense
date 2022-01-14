@@ -1,7 +1,7 @@
-from msilib import Table
 from sqlalchemy import event, Column, String, DateTime, JSON, ForeignKey, Boolean
 from sqlalchemy.engine import Connection
 from sqlalchemy.orm import relationship
+from sqlalchemy.schema import Table
 
 from boatsense import CFG
 from boatsense.db import Base
@@ -16,7 +16,7 @@ class Item(Base):
     asat = Column(DateTime, nullable=True)
 
 @event.listens_for(Item.__table__, "after_create")
-def insert_names(target, connection: Connection, **kw):
+def insert_names(target: Table, connection: Connection, **kw):
     '''auto table populating code'''
     for item in CFG.initial_name_data:
         connection.execute(target.insert(), item)

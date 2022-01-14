@@ -50,6 +50,7 @@ class Client(object):
                 asat = datetime.now(tz=timezone.utc)
                 crud.add_sensor(self.db, name, asat, data)
                 if self.send:
+                    LG.debug("sending udp")
                     msg = '{{"{}": {}}}'.format(name, data.json()).encode('utf-8')
                     self.server.sendto(msg, CFG.udp_addr)
         else:
@@ -61,12 +62,17 @@ class Client(object):
         LG.info("Running")
         while True:
             run_pending()
-            data = self.listen.receive(1024)
-            if data:
-                if data.decode('utf-8') == 'T':
-                    self.send = True
-                else:
-                    self.send = False
+            try:
+                data, addr = self.listen.recvfrom(1024)
+                if data:
+                    if data.decode('utf-8') == 'T':
+                        LG.info("Sending UDP on")
+                        self.send = True
+                    else:
+                        LG.info("Sending UDP off")
+                        self.send = False
+            except BlockingIOError:
+                pass
             sleep(self.sleep)
 
 if __name__ == "__main__":
