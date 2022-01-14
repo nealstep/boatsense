@@ -63,7 +63,7 @@ class Client(object):
         while True:
             run_pending()
             try:
-                data, addr = self.listen.recvfrom(1024)
+                data, addr = self.listen.recvfrom(CFG.udp_size)
                 if data:
                     if data.decode('utf-8') == 'T':
                         LG.info("Sending UDP on")
