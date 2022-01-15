@@ -40,7 +40,7 @@ class Client(object):
 
     def upload(self):
         LG.warning("Not Implemented: upload")
-        
+
     def get_reading(self, name: str):
         if name in self.sensors:
             data = self.sensors[name].get()
@@ -48,8 +48,8 @@ class Client(object):
                 LG.debug("New data: {}".format(name))
                 asat = datetime.now(tz=timezone.utc)
                 crud.add_sensor(self.db, name, asat, data)
-                msg = '{{"{}": {}}}'.format(name, data.json())
-                self.mqtt.publish(CFG.mqtt_topic.format(name), msg)
+                LG.debug("{}: {}".format(CFG.mqtt_topic.format(name), data.json()))
+                self.mqtt.publish(CFG.mqtt_topic.format(name), data.json())
         else:
             if name == 'upload':
                 self.upload()
@@ -63,7 +63,7 @@ class Client(object):
 
 if __name__ == "__main__":
     LG.info("Starting Client")
-    model.Base.metadata.create_all(bind=engine)  
+    model.Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:
         client = Client(db)
