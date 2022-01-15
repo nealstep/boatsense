@@ -53,6 +53,9 @@ class Client(object):
         else:
             if name == 'upload':
                 self.upload()
+            elif name == 'heartbeat':
+                LG.debug("{}: {}".format(CFG.mqtt_topic.format(name), "{x: *}"))
+                self.mqtt.publish(CFG.mqtt_topic.format(name), "{x: *}")
             crud.add_special(self.db, name)
 
     def run(self):

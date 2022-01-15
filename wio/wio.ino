@@ -5,8 +5,8 @@
 #define BAUD 115200
 #define DELAY_WIFI 500
 #define DELAY_MQTT 5000
-#define DELAY_LOOP 250
-#define DELAY_CHECK 20
+#define DELAY_LOOP 50
+#define DELAY_CHECK 100
 
 const char* SSID="Canobi_Build";
 const char* PWD="swadekrap";
@@ -51,6 +51,7 @@ void setup_wifi(void) {
 }
 
 void mqtt_callback(char* topic, byte* payload, unsigned int length) {
+  Serial.println(topic);
   tft.println(topic);
 }
 
