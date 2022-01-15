@@ -24,6 +24,9 @@ TFT_eSPI tft = TFT_eSPI();
 
 // counter
 int loops;
+volatile unsigned long lastDebounceTime = 0;
+unsigned long debounceDelay = 500000;
+
 
 void setup_tft(void) {
   tft.begin();
@@ -78,6 +81,12 @@ void setup_mqtt(void) {
   mqtt_connect();
 }
 
+void setup_buttons(void) {
+  pinMode(WIO_KEY_A, INPUT_PULLUP);
+  pinMode(WIO_KEY_B, INPUT_PULLUP);
+  pinMode(WIO_KEY_C, INPUT_PULLUP);
+}
+
 void setup() {
   // initialize  serial ports:
   Serial.begin(BAUD);
@@ -94,9 +103,30 @@ void setup() {
   Serial.println("Started");
 }
 
+void check_buttons(void) {
+  char button;
+  long currentTime = micros();
+  
+  button = '_';
+  if (digitalRead(WIO_KEY_A) == LOW) {
+    button = 'A';
+  } else if (digitalRead(WIO_KEY_B) == LOW) {
+    button = 'B';
+  } else if (digitalRead(WIO_KEY_C) == LOW) {
+    button = 'C';
+  }
+  if (button != '_') {
+    if ((currentTime - lastDebounceTime) > debounceDelay) {
+      Serial.print("Button ");
+      Serial.println(button);
+    }
+  }
+}
+
 // handle buttons for screens
 // display data (start with one screen)
 void loop() {
+  check_buttons();
   if (loops > DELAY_CHECK) {
     loops = 0;
     if (WiFi.status() != WL_CONNECTED) {
