@@ -119,16 +119,16 @@ class GPS(Data):
         self.items = self.cfg.items[level]
         self.funcs = self.cfg.funcs[level]
 
-    def map_helper(val: float, c1: str, c2: str, form: str) -> str:
+    def map_helper(val: float, form: dict) -> str:
         if val > 0:
-            c = c1
+            c = form['p']
             v = val
         else:
-            c = 'S'
+            c = form['n']
             v = -val
         d = int(v)
-        m = 60 * (v%1)
-        s = form.format(d, m, c)
+        m = 60 * (v % 1) # get non integer part of number and convert to decimal minutes
+        s = form['s'].format(d, m, c)
         LG.debug(s)
         return s
 
@@ -142,8 +142,8 @@ class GPS(Data):
             self.get_vars()
             self.cur['time_utc'] = self.dev.get_time()
             self.cur['time_local'] = self.dev.get_time(True)
-            self.cur['lat_map'] = self.map_helper(self.cur['lat'], 'N', 'S', CFG.map_data['lat'])
-            self.cur['lon_map'] = self.map_helper(self.cur['lon'], 'E', 'W', CFG.map_data['lon'])
+            self.cur['lat_map'] = self.map_helper(self.cur['lat'], CFG.map_data['lat'])
+            self.cur['lon_map'] = self.map_helper(self.cur['lon'], CFG.map_data['lon'])
         if self.cur['mode'] >= 3:
             self.set_vars('3')
             self.get_vars()
