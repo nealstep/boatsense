@@ -119,7 +119,7 @@ class GPS(Data):
         self.items = self.cfg.items[level]
         self.funcs = self.cfg.funcs[level]
 
-    def map_helper(val: float, form: dict) -> str:
+    def map_helper(self, val: float, form: dict) -> str:
         if val > 0:
             c = form['p']
             v = val

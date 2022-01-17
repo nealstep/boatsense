@@ -84,8 +84,8 @@ class CFG:
     log_lvl = 'debug'
     log_when = 'midnight'
     map_data = {
-        'lat': "{:>3d}*{:>5.2f}'{:1s}",
-        'lon': "{:>03d}*{:>5.2f}'{:1s}",
+        'lat': {'s': "{:>3d}*{:>5.2f}'{:1s}", 'p': 'N', 'n': 'S'},
+        'lon': {'s': "{:>03d}*{:>5.2f}'{:1s}", 'p': 'E', 'n': 'W'}
     }
     name = 'boatsense'
     out = {
