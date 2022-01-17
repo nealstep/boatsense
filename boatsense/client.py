@@ -21,7 +21,6 @@ class Client(object):
     def __init__(self, db: Session):
         self.db = db
         i2c = I2C()
-        self.network()
         self.sensors = {}
         self.sensors['bme280'] = sensors.BME280(i2c)
         self.sensors['lsm9ds1'] = sensors.LSM9DS1(i2c)
