@@ -35,7 +35,8 @@ class Client(object):
         out = {}
         for i in range(7):
             nm = "line_{}".format(i)
-            print(name, nm, i)
+            print(name, nm, i, data)
+            print(CFG.out[name])
             out[nm] = CFG.out[name][i].format(data)
         LG.debug(out)
         self.mqtt.publish(CFG.mqtt_topic.format(name), dumps(out), retain=True)
