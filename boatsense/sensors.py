@@ -59,7 +59,7 @@ class Data(object):
         else:
             data = None
         return data
-                        
+
 
 class BME280(Data):
 
@@ -114,11 +114,24 @@ class GPS(Data):
     def __init__(self):
         super().__init__('gps')
         gps_connect()
-        
+
     def set_vars(self, level: str):
         self.items = self.cfg.items[level]
         self.funcs = self.cfg.funcs[level]
-        
+
+    def map_helper(val: float, c1: str, c2: str, form: str) -> str:
+        if val > 0:
+            c = c1
+            v = val
+        else:
+            c = 'S'
+            v = -val
+        d = int(v)
+        m = 60 * (v%1)
+        s = form.format(d, m, c)
+        LG.debug(s)
+        return s
+
     def get(self) -> schema.GPS:
         self.dev = gps_get_current()
         self.cur['device'] = gps_device()
@@ -129,6 +142,8 @@ class GPS(Data):
             self.get_vars()
             self.cur['time_utc'] = self.dev.get_time()
             self.cur['time_local'] = self.dev.get_time(True)
+            self.cur['lat_map'] = self.map_helper(self.cur['lat'], 'N', 'S', CFG.map_data['lat'])
+            self.cur['lon_map'] = self.map_helper(self.cur['lon'], 'E', 'W', CFG.map_data['lon'])
         if self.cur['mode'] >= 3:
             self.set_vars('3')
             self.get_vars()

@@ -43,6 +43,8 @@ class GPS(Data):
     m_speed: Optional[float]
     m_track: Optional[float]
     m_climb:Optional[float]
+    lat_map: Optional[str]
+    lon_map: Optional[str]
 
 
 class ORMModel(BaseModel):

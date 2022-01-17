@@ -57,7 +57,7 @@ class GPS(Data):
         'm_climb': 0.2,
     }
     moves = ['speed', 'track', 'climb']
- 
+
 
 class CFG:
     '''config object class'''
@@ -83,7 +83,40 @@ class CFG:
     }
     log_lvl = 'debug'
     log_when = 'midnight'
+    map_data = {
+        'lat': "{:>3d}*{:>5.2f}'{:1s}",
+        'lon': "{:>03d}*{:>5.2f}'{:1s}",
+    }
     name = 'boatsense'
+    out = {
+        'bme280': [
+            'Temp: {temperature:>5.1f}C',
+            'Humid: {humidity:>3.1f}%',
+            'Press: {pressure:>4d} Pa',
+            'Press 05: {pressure_05:>+4d} Pa',
+            'Press 10: {pressure_10:>+4d} Pa',
+            'Press 15: {pressure_15:>+4d} Pa',
+            ''
+        ],
+        'lsm9ds1': [
+            'A: {acceleration_x:>+7.3}x',
+            '   {acceleration_y:>+7.3}y',
+            '   {acceleration_z:>+7.3}z',
+            'G: {gyro_x:>+7.3}x',
+            '   {gyro_y:>+7.3}y',
+            '   {gyro_z:>+7.3}z',
+            'C: TBD'
+        ],
+        'gps': [
+            'La: {lat_map}',
+            'Lo: {lon_map}',
+            'Speed: {m_speed:>-6.2f}',
+            'Course: {m_track:3.1f}',
+            'Alt: {altitude:5.1} {m_climb:-4.1}',
+            'Lat: {lat:>-9.5f}*',
+            'Lon: {lon:>-9.5f}*'
+        ]
+    },
     sensors = {
         'data': Data,
         'bme280': BME280,

@@ -5,8 +5,8 @@
 #define BAUD 115200
 #define DELAY_WIFI 500
 #define DELAY_MQTT 5000
-#define DELAY_LOOP 50
-#define DELAY_CHECK 100
+#define DELAY_LOOP 5
+#define DELAY_CHECK 1000
 
 const char* SSID="Canobi_Build";
 const char* PWD="swadekrap";
@@ -23,10 +23,12 @@ PubSubClient mqttClient(wifiClient);
 TFT_eSPI tft = TFT_eSPI();
 
 // counter
-int loops;
-volatile unsigned long lastDebounceTime = 0;
-unsigned long debounceDelay = 500000;
+uint16_t loops;
+unsigned long lastDebounceTime = 0;
+const unsigned long DEBOUNCE_DELAY = 500000;
 
+// screen tracker
+char screen = 'A';
 
 void setup_tft(void) {
   tft.begin();
@@ -87,19 +89,39 @@ void setup_buttons(void) {
   pinMode(WIO_KEY_C, INPUT_PULLUP);
 }
 
+void setup_vars(void) {
+  
+}
+
+void set_screen(void) {
+  tft.fillScreen(TFT_BLACK);
+  tft.setCursor(0, 0, 2);
+  tft.setTextColor(TFT_WHITE,TFT_BLACK);  
+  tft.setTextSize(2);  
+}
+
 void setup() {
   // initialize  serial ports:
   Serial.begin(BAUD);
   Serial.flush();
   Serial.println("Starting");
+
+  // setup devices
   setup_tft();
   setup_wifi();
   setup_mqtt();
+  setup_buttons();
+  setup_vars();
+
+  // init constants
   loops = 0;
-  tft.fillScreen(TFT_BLACK);
-  tft.setCursor(0, 0, 2);
-  tft.setTextColor(TFT_WHITE,TFT_BLACK);  
-  tft.setTextSize(1);
+  lastDebounceTime = 0;
+  screen = 'A';
+
+  // setup screen
+  set_screen();
+
+  // ready
   Serial.println("Started");
 }
 
@@ -116,9 +138,14 @@ void check_buttons(void) {
     button = 'C';
   }
   if (button != '_') {
-    if ((currentTime - lastDebounceTime) > debounceDelay) {
+    if ((currentTime - lastDebounceTime) > DEBOUNCE_DELAY) {
+      lastDebounceTime = currentTime;
       Serial.print("Button ");
       Serial.println(button);
+      if (screen != button) {
+        screen = button;
+        set_screen();
+      }
     }
   }
 }
