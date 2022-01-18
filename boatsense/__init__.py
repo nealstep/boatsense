@@ -21,6 +21,7 @@ class BME280(Data):
     }
     b = 17.62
     c = 243.12
+    bad = -9999
 
 
 class LSM9DS1(Data):

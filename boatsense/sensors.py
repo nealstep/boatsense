@@ -66,7 +66,7 @@ class BME280(Data):
     def __init__(self, i2c: I2C):
         super().__init__('bme280')
         self.dev = Adafruit_BME280_I2C(i2c)
-        self.press = deque(15 * [-1], 15)
+        self.press = deque(15 * [self.cfg.bad], 15)
 
     def get(self) -> schema.BME280:
         self.get_vars()
@@ -76,8 +76,8 @@ class BME280(Data):
         # calculate pressure change over time
         for i in (4, 9, 14):
             item = 'pressure_{:02d}'.format(i+1)
-            if self.press[i] == -1:
-                self.cur[item] = -1
+            if self.press[i] == self.cfg.bad:
+                self.cur[item] = self.cfg.bad
             else:
                 self.cur[item] = self.press[i] - self.cur['pressure']
         self.press.appendleft(self.cur['pressure'])
