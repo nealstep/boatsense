@@ -129,7 +129,6 @@ class GPS(Data):
         d = int(v)
         m = 60 * (v % 1) # get non integer part of number and convert to decimal minutes
         s = form['s'].format(d, m, c)
-        LG.debug(s)
         return s
 
     def get(self) -> schema.GPS:
