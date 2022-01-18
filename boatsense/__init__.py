@@ -92,10 +92,10 @@ class CFG:
         'bme280': [
             'Temp: {temperature:>5.1f}C',
             'Humid: {humidity:>3.1f}%',
-            'Press: {pressure:>4d} Pa',
-            'Press 05: {pressure_05:>+4d} Pa',
-            'Press 10: {pressure_10:>+4d} Pa',
-            'Press 15: {pressure_15:>+4d} Pa',
+            'Press: {pressure:>4.0f} Pa',
+            'Press 05: {pressure_05:>+4.0f} Pa',
+            'Press 10: {pressure_10:>+4.0f} Pa',
+            'Press 15: {pressure_15:>+4.0f} Pa',
             ''
         ],
         'lsm9ds1': [
