@@ -60,6 +60,7 @@ class Data(object):
             data['msg'] = 'success'
         else:
             data = None
+        print(data)
         return data
 
 
@@ -84,7 +85,8 @@ class BME280(Data):
                 self.cur[item] = self.press[i] - self.cur['pressure']
         self.press.appendleft(self.cur['pressure'])
         # return data if changed
-        return self.check(schema.BME280)
+        d = self.check(schema.BME280)
+        return d
 
 
 class LSM9DS1(Data):
@@ -109,7 +111,8 @@ class LSM9DS1(Data):
                 for j, a in enumerate(self.cfg.axis):
                     item = '{}_{}'.format(i, a)
                     self.cur[item] = self.cur[i][j]
-        return self.check(schema.LSM9DS1)
+        d = self.check(schema.LSM9DS1)
+        return d
 
 class GPS(Data):
 
@@ -151,4 +154,5 @@ class GPS(Data):
             for m in self.cfg.moves:
                 m_name = "m_{}".format(m)
                 self.cur[m_name] = self.cur['movement'][m]
-        return self.check(schema.GPS)
+        d = self.check(schema.GPS)
+        return d
