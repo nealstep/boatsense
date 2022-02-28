@@ -56,11 +56,10 @@ class Data(object):
             items = schemata.schema()['properties'].keys()
             values = {k:v for k,v in self.cur.items() if k in items}
             data = schemata(**values)
-            data['name'] = self.name
-            data['msg'] = 'success'
+            data['msg'] = 'ok'
         else:
-            data = None
-        print(data)
+            data['msg'] = 'empty'
+        data['name'] = self.name
         return data
 
 
