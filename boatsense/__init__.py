@@ -133,6 +133,8 @@ class CFG:
     }
     mqtt = '192.168.15.148'
     mqtt_topic = "sensors/{}"
+    update_server = "mycroft.home.bakerst.org"
+    update_server_path = "updates/"
     udp_addr = ('192.168.15.255', 22001)
 
 LG = getLogger(CFG.name)

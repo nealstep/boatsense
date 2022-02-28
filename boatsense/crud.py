@@ -21,9 +21,9 @@ def _convert_to_dict(o: schema.ORMModel) -> schema.Message:
     d = {c.name: getattr(o, c.name) for c in o.__table__.columns}
     return d
 
-#def _convert_to_array(a: list[schema.ORMModel]) -> list[schema.Message]:
-#    l = [ _convert_to_dict(i) for i in a]
-#    return l
+def _convert_to_array(a: list[schema.ORMModel]) -> list[schema.Message]:
+    l = [ _convert_to_dict(i) for i in a]
+    return l
 
 def get_sensor(db: Session, name: str) -> schema.Data:
     '''Get latest sensor reading'''
@@ -36,7 +36,7 @@ def get_date(db: Session, name: str) -> schema.DateInfo:
     item = db.query(model.Item).filter(model.Item.name==name).one()
     return _convert_to_dict(item)
 
-#def get_dates(db: Session, skip: int=0, limit: int=CFG.db_limit) -> list[schema.DateInfo]:
-#    '''get dates'''
-#    items = db.query(model.Item).offset(skip).limit(limit).all()
-#    return _convert_to_array(items)
+def get_dates(db: Session, skip: int=0, limit: int=CFG.db_limit) -> list[schema.DateInfo]:
+    '''get dates'''
+    items = db.query(model.Item).offset(skip).limit(limit).all()
+    return _convert_to_array(items)
