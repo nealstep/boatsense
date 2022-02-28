@@ -49,5 +49,6 @@ def get_updates(db: Session, skip: int=0, limit: int=CFG.db_limit) -> schema.Upd
     d = _convert_to_array(items)
     latest_item = max(d, key=lambda x:x['asat'])
     e = latest_item['asat']
-    ug = schema.UpdateGroup({'asat': e, 'updates': d})
+    v = {'asat': e, 'updates': d}
+    ug = schema.UpdateGroup(**v)
     return ug
