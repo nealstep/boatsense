@@ -50,8 +50,16 @@ def _convert_updates(items: List[schema.Sensor]) -> schema.UpdateGroup:
         i = _convert_to_dict(item)
         print(i['data'])
         js = loads(i['data'])
-        print(js)
-        i['data'] = js
+        if i['name'] == 'gps':
+            d = schema.GPS(**js)
+        elif i['name'] == 'lsm9ds1':
+            d = schema.LSM9DS1(**js)
+        elif i['name'] == 'bme280':
+            d = schema.BME280(**js)
+        else:
+            print("Somthing Odd")
+            d = None
+        i['data'] = d
         if i['asat'] > e:
             e = i['asat']
         l.append(i)
