@@ -40,7 +40,9 @@ class Client(object):
         self.mqtt.publish(CFG.mqtt_topic.format(name), dumps(out), retain=True)
 
     def upload(self):
-        # select all records since last updates and post to update_server on update_server_path
+        # select all records since last updates
+        data = crud.get_updates(self.db)
+        # post to update_server on update_server_path
         LG.warning("Not Implemented: upload")
 
     def get_reading(self, name: str):

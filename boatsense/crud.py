@@ -33,7 +33,7 @@ def get_sensor(db: Session, name: str) -> schema.Data:
     return _convert_to_dict(sensor)
 
 def get_date(db: Session, name: str) -> schema.DateInfo:
-    '''get dates'''
+    '''get date'''
     item = db.query(model.Item).filter(model.Item.name==name).one()
     return _convert_to_dict(item)
 
@@ -41,3 +41,11 @@ def get_dates(db: Session, skip: int=0, limit: int=CFG.db_limit) -> List[schema.
     '''get dates'''
     items = db.query(model.Item).offset(skip).limit(limit).all()
     return _convert_to_array(items)
+
+def get_updates(db: Session, skip: int=0, limit: int=CFG.db_limit) -> List[schema.Update]:
+    '''get updates to limit since last update'''
+    item = db.query(model.Item).filter(model.Item.name=="upload",model.Item.sensor==False).one()
+    items = db.query(model.Sensor).filter(model.Sensor.asat>item.asat).offset(skip).limit(limit).all()
+    d = _convert_to_array(items)
+    print(d)
+    return d
