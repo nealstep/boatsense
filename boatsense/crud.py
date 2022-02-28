@@ -48,17 +48,7 @@ def _convert_updates(items: List[schema.Sensor]) -> schema.UpdateGroup:
     e = datetime.min
     for item in items:
         i = _convert_to_dict(item)
-        print(i['data'])
-        js = loads(i['data'])
-        if i['name'] == 'gps':
-            d = schema.GPS(**js)
-        elif i['name'] == 'lsm9ds1':
-            d = schema.LSM9DS1(**js)
-        elif i['name'] == 'bme280':
-            d = schema.BME280(**js)
-        else:
-            print("Somthing Odd")
-            d = None
+        d = schema.d_schemata[i['name']](loads(i['data']))
         i['data'] = d
         if i['asat'] > e:
             e = i['asat']

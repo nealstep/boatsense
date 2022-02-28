@@ -85,3 +85,9 @@ class Sensor(ORMModel):
     name: str
     asat: datetime
     data: Data
+
+d_schemata = {
+    'lsm9ds1': LSM9DS1,
+    'gps': GPS,
+    'bme280': BME280
+}
