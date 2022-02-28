@@ -49,13 +49,15 @@ class Data(object):
                 ret = True
         return ret
 
-    def check(self, schemata: schema.Data) -> schema.Data:
+    def check(self, name: str, schemata: schema.Data) -> schema.Data:
         """check if data has changed"""
         if not self.last or self.changed():
             self.last = deepcopy(self.cur)
             items = schemata.schema()['properties'].keys()
             values = {k:v for k,v in self.cur.items() if k in items}
             data = schemata(**values)
+            data['name'] = self.name
+            data['msg'] = 'success'
         else:
             data = None
         return data
