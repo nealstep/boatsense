@@ -43,7 +43,7 @@ class Client(object):
         LG.warning("Not Implemented: upload")
 
     def get_reading(self, name: str):
-        self.mqtt.publish(CFG.mqtt_topic.format("log"), "reading")
+        #self.mqtt.publish(CFG.mqtt_topic.format("log"), "reading")
         if name in self.sensors:
             data = self.sensors[name].get()
             if data:
@@ -56,7 +56,7 @@ class Client(object):
             elif name == 'heartbeat':
                 LG.debug("{}: {}".format(CFG.mqtt_topic.format(name), "{x:H}"))
                 self.mqtt.publish(CFG.mqtt_topic.format(name), "{x:H}")
-                crud.add_special(self.db, name)
+                crud.add_special(self.db, name) # once upload is implemented should be unindented
 
     def run(self):
         LG.info("Running")
