@@ -43,10 +43,10 @@ class Client(object):
         LG.warning("Not Implemented: upload")
 
     def get_reading(self, name: str):
+        self.mqtt.publish(CFG.mqtt_topic.format("log"), "reading")
         if name in self.sensors:
             data = self.sensors[name].get()
             if data:
-                LG.debug("New data: {}".format(name))
                 asat = datetime.now(tz=timezone.utc)
                 crud.add_sensor(self.db, name, asat, data)
                 self.display(name, data)
@@ -54,18 +54,20 @@ class Client(object):
             if name == 'upload':
                 self.upload()
             elif name == 'heartbeat':
-                LG.debug("{}: {}".format(CFG.mqtt_topic.format(name), "{x: *}"))
-                self.mqtt.publish(CFG.mqtt_topic.format(name), "{x: *}")
-            crud.add_special(self.db, name)
+                LG.debug("{}: {}".format(CFG.mqtt_topic.format(name), "{x:H}"))
+                self.mqtt.publish(CFG.mqtt_topic.format(name), "{x:H}")
+                crud.add_special(self.db, name)
 
     def run(self):
         LG.info("Running")
         self.mqtt.loop_start()
+        self.mqtt.publish(CFG.mqtt_topic.format("heartbeat"), "{x:B}")
         try:
             while True:
                 run_pending()
                 sleep(self.sleep)
         finally:
+            self.mqtt.publish(CFG.mqtt_topic.format("heartbeat"), "{x:E}")
             self.mqtt.loop_stop()
 
 if __name__ == "__main__":
