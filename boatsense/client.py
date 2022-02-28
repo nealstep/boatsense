@@ -46,7 +46,7 @@ class Client(object):
         #self.mqtt.publish(CFG.mqtt_topic.format("log"), "reading")
         if name in self.sensors:
             data = self.sensors[name].get()
-            if data['msg'] == 'ok':
+            if data:
                 asat = datetime.now(tz=timezone.utc)
                 crud.add_sensor(self.db, name, asat, data)
                 self.display(name, data)
