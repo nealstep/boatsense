@@ -49,7 +49,7 @@ class Data(object):
                 ret = True
         return ret
 
-    def check(self, name: str, schemata: schema.Data) -> schema.Data:
+    def check(self, schemata: schema.Data) -> schema.Data:
         """check if data has changed"""
         if not self.last or self.changed():
             self.last = deepcopy(self.cur)
