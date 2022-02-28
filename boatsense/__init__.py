@@ -64,7 +64,7 @@ class CFG:
     '''config object class'''
 
     db_limit = environ.get('DB_LIMIT', 100)
-    db_url = environ.get('DB_URL', "postgresql:///neal")
+    db_url = environ.get('DB_URL', "postgresql:///boatsense")
     initial_name_data = [
         {'name': 'heartbeat', 'sensor': False, 'asat': None},
         {'name': 'upload', 'sensor': False, 'asat': None},
