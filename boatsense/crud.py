@@ -48,7 +48,9 @@ def _convert_updates(items: List[schema.Sensor]) -> schema.UpdateGroup:
     e = datetime.min
     for item in items:
         i = _convert_to_dict(item)
+        print(i['data'])
         js = loads(i['data'])
+        print(js)
         i['data'] = js
         if i['asat'] > e:
             e = i['asat']
