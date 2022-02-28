@@ -39,7 +39,7 @@ def get_date(name: str , db: Session = Depends(get_db)):
 #    return items
 
 @app.post("/updates/", response_model=schema.Message)
-def do_updates(updates: list[schema.Data], db: Session = Depends(get_db)):
+def do_updates(updates: list[schema.Update], db: Session = Depends(get_db)):
     s = True
     for item in updates:
         if item:

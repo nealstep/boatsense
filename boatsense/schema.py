@@ -4,13 +4,13 @@ from pydantic.types import Json
 from typing import Optional
 
 
-class Message(BaseModel):
-    '''simple message'''
-    msg: str
+class RObject(BaseModel):
+    '''return object'''
+    pass
 
-class Data(Message):
+class Data(RObject):
     '''Base for all sensor data'''
-    name: str
+    pass
 
 class BME280(Data):
     '''BME280 Data'''
@@ -47,10 +47,21 @@ class GPS(Data):
     lat_map: Optional[str]
     lon_map: Optional[str]
 
-class DateInfo(Message):
+class DateInfo(RObject):
     '''date info'''
     sensor: bool
     asat: Optional[datetime]
+
+class Message(RObject):
+    '''simple message'''
+    msg: str
+
+
+class Update(BaseModel):
+    '''update'''
+    name: str
+    asat: datetime
+    data: Data
 
 
 class ORMModel(BaseModel):

@@ -55,8 +55,6 @@ class Data(object):
             self.last = deepcopy(self.cur)
             items = schemata.schema()['properties'].keys()
             values = {k:v for k,v in self.cur.items() if k in items}
-            values['name'] = self.name
-            values['msg'] = 'ok'
             data = schemata(**values)
         else:
             data = None
