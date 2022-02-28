@@ -47,8 +47,10 @@ def get_updates(db: Session, skip: int=0, limit: int=CFG.db_limit) -> schema.Upd
     item = db.query(model.Item).filter(model.Item.name=="upload",model.Item.sensor==False).one()
     items = db.query(model.Sensor).filter(model.Sensor.asat>item.asat).offset(skip).limit(limit).all()
     d = _convert_to_array(items)
+    print(d)
+    exit(1)
     latest_item = max(d, key=lambda x:x['asat'])
     e = latest_item['asat']
     v = {'asat': e, 'updates': d}
-    ug = schema.UpdateGroup(**v)
+    #ug = schema.UpdateGroup(**v)
     return ug
