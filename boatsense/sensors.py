@@ -55,13 +55,12 @@ class Data(object):
             self.last = deepcopy(self.cur)
             items = schemata.schema()['properties'].keys()
             values = {k:v for k,v in self.cur.items() if k in items}
+            values['name'] = self.name
+            values['msg'] = 'ok'
             data = schemata(**values)
-            data['msg'] = 'ok'
         else:
-            data['msg'] = 'empty'
-        data['name'] = self.name
+            data = None
         return data
-
 
 class BME280(Data):
 
