@@ -1,7 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel
 from pydantic.types import Json
-from typing import Optional
+from typing import Optional, List
 
 
 class RObject(BaseModel):
@@ -62,6 +62,11 @@ class Update(BaseModel):
     name: str
     asat: datetime
     data: Data
+
+class UpdateGroup(BaseModel):
+    '''update group'''
+    asat: datetime
+    updates: List(Update)
 
 
 class ORMModel(BaseModel):

@@ -42,6 +42,7 @@ class Client(object):
     def upload(self):
         # select all records since last updates
         data = crud.get_updates(self.db)
+        print(data)
         # post to update_server on update_server_path
         LG.warning("Not Implemented: upload")
 

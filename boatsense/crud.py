@@ -42,10 +42,12 @@ def get_dates(db: Session, skip: int=0, limit: int=CFG.db_limit) -> List[schema.
     items = db.query(model.Item).offset(skip).limit(limit).all()
     return _convert_to_array(items)
 
-def get_updates(db: Session, skip: int=0, limit: int=CFG.db_limit) -> List[schema.Update]:
+def get_updates(db: Session, skip: int=0, limit: int=CFG.db_limit) -> schema.UpdateGroup:
     '''get updates to limit since last update'''
     item = db.query(model.Item).filter(model.Item.name=="upload",model.Item.sensor==False).one()
     items = db.query(model.Sensor).filter(model.Sensor.asat>item.asat).offset(skip).limit(limit).all()
     d = _convert_to_array(items)
-    print(d)
-    return d
+    latest_item = max(d, key=lambda x:x['asat'])
+    e = latest_item['asat']
+    ug = schema.UpdateGroup({'asat': e, 'updates': d})
+    return ug
