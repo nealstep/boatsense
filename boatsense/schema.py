@@ -66,7 +66,7 @@ class Update(BaseModel):
 class UpdateGroup(BaseModel):
     '''update group'''
     asat: datetime
-    updates: List(Update)
+    updates: List[Update]
 
 
 class ORMModel(BaseModel):
