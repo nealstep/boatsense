@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from json import loads
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -42,15 +43,23 @@ def get_dates(db: Session, skip: int=0, limit: int=CFG.db_limit) -> List[schema.
     items = db.query(model.Item).offset(skip).limit(limit).all()
     return _convert_to_array(items)
 
+def _convert_updates(items: List[schema.Sensor]) -> schema.UpdateGroup:
+    l = []
+    e = 0
+    for item in items:
+        i = _convert_to_dict(item)
+        js = loads(i['data'])
+        i['data'] = js
+        if i['asat'] > e:
+            e = i['asat']
+        l.append(i)
+    v = {'asat': e, 'updates': l}
+    ug = schema.UpdateGroup(**v)
+    return ug
+
 def get_updates(db: Session, skip: int=0, limit: int=CFG.db_limit) -> schema.UpdateGroup:
     '''get updates to limit since last update'''
     item = db.query(model.Item).filter(model.Item.name=="upload",model.Item.sensor==False).one()
     items = db.query(model.Sensor).filter(model.Sensor.asat>item.asat).offset(skip).limit(limit).all()
-    d = _convert_to_array(items)
-    print(d)
-    exit(1)
-    latest_item = max(d, key=lambda x:x['asat'])
-    e = latest_item['asat']
-    v = {'asat': e, 'updates': d}
-    #ug = schema.UpdateGroup(**v)
-    return ug
+    d = _convert_updates(items)
+    return d
