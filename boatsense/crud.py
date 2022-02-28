@@ -45,7 +45,7 @@ def get_dates(db: Session, skip: int=0, limit: int=CFG.db_limit) -> List[schema.
 
 def _convert_updates(items: List[schema.Sensor]) -> schema.UpdateGroup:
     l = []
-    e = 0
+    e = datetime.min
     for item in items:
         i = _convert_to_dict(item)
         js = loads(i['data'])
