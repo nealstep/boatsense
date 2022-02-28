@@ -3,13 +3,13 @@ from sqlalchemy.orm import Session
 
 from boatsense import CFG, model, schema
 
-def add_special(db: Session, name: str):
+def add_special(db: Session, name: str) -> None:
     '''Add a special entry (one without a sensor)'''
     item = db.query(model.Item).filter(model.Item.name==name,model.Item.sensor==False).one()
     item.asat = datetime.now(tz=timezone.utc)
     db.commit()
 
-def add_sensor(db: Session, name: str, asat: datetime, data: schema.Data):
+def add_sensor(db: Session, name: str, asat: datetime, data: schema.Data) -> None:
     '''Add sensor data updating names with last update time'''
     sensor = model.Sensor(name=name, asat=asat, data=data.json())
     db.merge(sensor)
@@ -17,13 +17,13 @@ def add_sensor(db: Session, name: str, asat: datetime, data: schema.Data):
     item.asat = asat
     db.commit()
 
-def _convert_to_dict(o: schema.ORMModel) -> schema.RObject:
+def _convert_to_dict(o: schema.ORMModel) -> schema.Message:
     print(o)
     d = {c.name: getattr(o, c.name) for c in o.__table__.columns}
     print(d)
     return d
 
-def _convert_to_array(a: list[schema.ORMModel]) -> list[schema.RObject]:
+def _convert_to_array(a: list[schema.ORMModel]) -> list[schema.Message]:
     print(a)
     l = [ _convert_to_dict(i) for i in a]
     print(l)
